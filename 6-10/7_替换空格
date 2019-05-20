@@ -1,0 +1,45 @@
+请实现一个函数，将一个字符串中的每个空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。
+
+
+class Solution {
+    //1.计算机字符串的长度; 计算替换空格后字符串的长度
+    //2.从后向前替换空格,这样减少了字符移动的次数(如果从前向后, 则每次空格后的全部字符都要移动一次)
+    //3.注意空字符常量 '\0', 表示字符串的结束
+public:
+	void replaceSpace(char *str,int length) {
+        int old_len = 0;    //旧字符串长度
+        int space_num = 0; //空格个数
+        int i = 0;
+        //计算字符串的长度
+        while(str[i] != '\0')
+        {
+            old_len++;
+            if(str[i] == ' ')
+            {
+                space_num++;
+            }
+            i++;
+        }
+        //一个空格可以替换成3个字符, 其中old_len包含一个了, 所以space_num*2
+        int new_len = old_len + 2*space_num; 
+        if(new_len > length) return; //length是容器*str的长度, 如果新长度大于它, 则无法插入
+        //指针从后向前遍历字符串
+        int old_pointer = old_len; //'\0'算入字符长度, 所以不能减去1;
+        int new_pointer = new_len;
+        //插入元素
+        while(old_pointer >=0 && new_pointer >= 0)
+        {
+            if(str[old_pointer] == ' ')
+            {
+                str[new_pointer--] = '0';
+                str[new_pointer--] = '2';
+                str[new_pointer--] = '%';
+            }
+            else
+            {
+                str[new_pointer--] = str[old_pointer];
+            }
+            old_pointer--;
+        }
+	}
+};

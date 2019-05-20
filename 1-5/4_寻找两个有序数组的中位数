@@ -1,0 +1,54 @@
+给定两个大小为 m 和 n 的有序数组 nums1 和 nums2。
+
+请你找出这两个有序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。
+
+
+思路: 
+  1. 设置双指针, 比较两个有序数组, 按序放入新数组中
+  2. 判断数组个数是奇数还是偶数
+    如果是奇数, 则中位数是nums[size/2]
+    如果是偶数, 则中位数是(nums[size/2] + nums[size/2 - 1])/2
+    
+    
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        if(nums1.size() == 0)
+            return MedofArray(nums2);
+        if(nums2.size() == 0)
+            return MedofArray(nums1); 
+        
+        vector<int> num3;
+        int size = (nums1.size()+nums2.size());
+        int mid = size/2;
+        int flag = !(size%2); //判断数组个数是偶数还是奇数
+        int i,m1,m2,cur;
+        double a,b;
+        for(i = m1 = m2 = 0;i < size;i++)
+        {   
+            a = m1 < nums1.size()?nums1[m1]:INT_MAX;//过界处理
+            b = m2 < nums2.size()?nums2[m2]:INT_MAX;//过界处理
+            
+            if(a < b)
+            {
+                num3.push_back(nums1[m1]);
+                m1++;
+            }
+            else
+            {
+                num3.push_back(nums2[m2]);
+                m2++;
+            }
+            if(i == mid)
+                break;
+        }
+        return (num3[mid]+num3[mid-flag])/2.0;
+    }
+    
+    double MedofArray(vector<int>& nums)
+    {
+        int mid = nums.size()/2;
+        int flag = !(nums.size()%2); //判断数组的个数是奇数还是偶数
+        return (nums[mid]+nums[mid-flag])/2.0;
+    }
+};

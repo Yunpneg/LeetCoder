@@ -1,0 +1,28 @@
+输入一个链表，按链表值从尾到头的顺序返回一个ArrayList。
+
+
+/**
+*  struct ListNode {
+*        int val;
+*        struct ListNode *next;
+*        ListNode(int x) :
+*              val(x), next(NULL) {
+*        }
+*  };
+*/
+class Solution {
+    //1. 定义vector容器, 依次存放链表数据
+    //2. 翻转vector, 再输出; reverse(vector.begin(), vector.end())
+public:
+    vector<int> printListFromTailToHead(ListNode* head) {
+        vector<int> vec;
+        //ListNode *p = head;
+        while(head!=NULL)
+        {
+            vec.push_back(head->val);
+            head = head->next;
+        }
+        reverse(vec.begin(), vec.end());
+        return vec;
+    }
+};

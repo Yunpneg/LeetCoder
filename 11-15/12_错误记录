@@ -1,0 +1,105 @@
+开发一个简单错误记录功能小模块，能够记录出错的代码所在的文件名称和行号。 
+处理:
+1.记录最多8条错误记录，对相同的错误记录(即文件名称和行号完全匹配)只记录一条，错误计数增加；(文件所在的目录不同，文件名和行号相同也要合并)
+2.超过16个字符的文件名称，只记录文件的最后有效16个字符；(如果文件名不同，而只是文件名的后16个字符和行号相同，也不要合并)
+3.输入的文件可能带路径，记录文件名称不能带路径
+
+输入描述:
+一行或多行字符串。每行包括带路径文件名称，行号，以空格隔开。
+
+    文件路径为windows格式
+
+    如：E:\V1R2\product\fpgadrive.c 1325
+
+输出描述:
+将所有的记录统计并将结果输出，格式：文件名代码行数数目，一个空格隔开，如: fpgadrive.c 1325 1 
+
+    结果根据数目从多到少排序，数目相同的情况下，按照输入第一次出现顺序排序。
+
+    如果超过8条记录，则只输出前8条记录.
+
+    如果文件名的长度超过16个字符，则只输出后16个字符
+
+输入例子1:
+E:\V1R2\product\fpgadrive.c 1325
+
+输出例子1:
+fpgadrive.c 1325 1
+
+
+知识点:
+  1. pair<string, int> 
+    -> std::pair主要的作用是将两个数据组合成一个数据，两个数据可以是同一类型或者不同类型。 
+    -> C++标准程序库中凡是“必须返回两个值”的函数， 也都会利用pair对象。 
+    -> make_pair() 无需写出型别， 就可以生成一个pair对象 
+    -> template pair make_pair(T1 a, T2 b) { return pair(a, b); }
+  2. getline(cin, string) 接收一个字符串, 可以接收空格并输出, 和cin.getline()类似，但是cin.getline()属于istream流，而getline()属于string流
+  3. cin.getline(char, len, end) 接收一个字符串, 可以接收空格并输出; 第三个参数是结尾的字符, 省略时, 默认为'\0'.
+  4. 例如: cin.getline(char, 5) 输入：jkljkljkl 输出：jklj , 只显示四个输出, 最后一个是'\0'.
+  5. 例如: cin.getline(char, 5, 'a') 输入jkaljkljkl时，输出jk 
+  6. unsigned int: 无符号类型能保存2倍于有符号类型的正整数数据
+  7. string中关于find()的应用, 与rfind()类似, 只不过rfind()是反向查找
+    -> find (const string& str, size_t pos = 0) 查找string类对象
+    -> find (const char* s, size_t pos = 0)  //查找对象--字符串
+    -> find (const char* s, size_t pos, size_t n)   //查找对象--字符串的前n个字符
+    -> find (char c, size_t pos = 0)   //查找对象--字符
+    找到 -- 返回 第一个字符的索引
+    没找到--返回   string::npos
+  8. substr(start_index, len) 截取相应长度的字符串; 默认长度是从头到尾 
+  9. vector中的删除数据的方法
+    -> pop_back() 删除最后一个元素.并不真正从vertor里面移走数据
+    -> erase()可以删除由一个iterator指出的元素，也可以删除一个指定范围的元素
+    -> remove()来删除vector容器中的元素
+    -> remove一般情况下不会改变容器的大小，而pop_back()与erase()等成员函数会改变容器的大小
+  10. algorithm::stable_sort(startindex, endindex, func)  
+    -> 带有stable的函数可保证相等元素的原本相对次序在排序后保持不变
+    -> 第三个参数是为了指定排序的规则, 是升序还是降序
+  11. string中erase()的使用方法
+    -> erase(pos,n); 删除从pos开始的n个字符，比如erase(0,1)就是删除第一个字符
+    -> erase(position);删除position处的一个字符(position是个string类型的迭代器)
+    -> erase(first,last);删除从first到last之间的字符（first和last都是迭代器）
+    
+    
+    
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm> //算法类库, 标准STL
+using namespace std;
+
+bool compare(pair<string, int> a, pair<string, int> b){
+    return a.second > b.second;
+}
+int main(){
+    string input, file;
+    vector<pair<string, int>> errors; 
+    while (getline(cin, input))
+    {
+        if (input.size() == 0)
+            break;
+        //反向查找字符'\',返回第一个目标字符的索引
+        unsigned int f = input.rfind('\\');
+        file = input.substr(f + 1); //截取文件名
+        errors.push_back(make_pair(file, 1));
+        for (int i = 0; i<(errors.size() - 1); i++)
+        {
+            if (errors[i].first == file)
+            {
+                errors[i].second++;
+                errors.pop_back(); //删除最后一个元素,但并不从vector中移走数据
+                break;
+            }
+        }
+    }
+    //algorithm库中的按照从小到大的顺序排列; 但是相等的元素不会改变其相对的位置
+    stable_sort(errors.begin(), errors.end(), compare);
+    int idx = 0;
+    while (idx<8 && idx<errors.size()){
+        string check = errors[idx].first;
+        int t = check.find(' ');//第一个空格所在的索引, 也就是文件名和行号间的空格
+        if (t>16) //说明文件名长度大于16
+            errors[idx].first.erase(0, t - 16);
+        cout << errors[idx].first << ' ' << errors[idx].second << endl;
+        idx++;
+    }
+}

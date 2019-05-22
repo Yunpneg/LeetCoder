@@ -1,0 +1,32 @@
+编写一个函数来查找字符串数组中的最长公共前缀。
+
+如果不存在公共前缀，返回空字符串 ""。
+
+示例 1:
+
+输入: ["flower","flow","flight"]
+输出: "fl"
+
+
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        if(strs.empty()) return "";
+        //选取第一个字符串作为公共前缀, 与后续字符串相比较
+        string obj = strs[0];
+        int i,j;
+        for(i=1; i<strs.size(); i++){
+            for(j=0; j<obj.size(); j++){
+                if(obj[j] == strs[i][j]){
+                    continue;
+                }
+                else{
+                    obj.erase(j); //减小字符串长度, 删除特定位置的字符
+                    break; 
+                }
+            }
+        }
+        return obj;
+    }
+};

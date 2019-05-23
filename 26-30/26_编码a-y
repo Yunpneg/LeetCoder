@@ -26,3 +26,31 @@ baca
   -> 第三步：找出bac的位置，即与baa之间的距离d3 = (‘c’-‘a’)*base[3] + 1
   -> 第四步：找出baca的位置，即与baca之间的距离d4 = (‘a’-‘a’)*base[4] + 1
 4. baca的Index = d1+d2+d3+d4-1
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main()
+{
+    string str;
+    int base[4]; 
+    while(getline(cin, str))
+    {
+        base[3] = 1;
+        int len = str.length();
+        
+        for(int i=2; i>=0; i--)
+        {
+            base[i] = base[i+1]*25 + 1;
+        }
+        int _index = 0; 
+        for(int j=0; j<len; j++)
+        {
+            _index += ((str[j] - 'a')*base[j] + 1);
+        }
+        cout << _index-1 <<endl;
+    }
+    return 0;
+}

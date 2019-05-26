@@ -1,0 +1,41 @@
+数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。
+例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。
+
+
+知识点: 容器vector中最大值, 最小值, 及其下标
+1. std::vector<int>::iterator biggest = std::max_element(std::begin(v), std::end(v)); 
+2. std::vector<double>::iterator minest = std::min_element(std::begin(v), std::end(v)); 
+  -> 均是iterator类型对象
+3. std::distance(std::begin(v), biggest) 最大值的下标
+4. 也可以写作: int nPos = (int)(std::max_element(v.begin(), v.end()) - (v.begin());
+  -> 指针的位置，减去初始指针的位置结果即为最大值得索引
+  
+  
+  
+class Solution {
+public:
+    int MoreThanHalfNum_Solution(vector<int> numbers) 
+    {
+        vector<int> res;
+        for(int i=0; i<numbers.size(); i++)
+        {
+            int flag = 1;
+            for(int j=i+1; j<numbers.size(); j++)
+            {
+                if(numbers[i] == numbers[j])
+                    flag++;    
+            }
+            res.push_back(flag);
+
+        }
+        int position = (int)(max_element(res.begin(), res.end()) - (res.begin()));
+        
+        if(res[position] > numbers.size()/2)
+        {
+            return numbers[position];
+        }
+            
+        else          
+            return 0;
+    }
+};

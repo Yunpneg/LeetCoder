@@ -1,0 +1,56 @@
+在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。
+输入一个数组,求出这个数组中的逆序对的总数P。并将P对1000000007取模的结果输出。 即输出P%1000000007
+
+
+思路: 分治算法
+
+class Solution {
+public:
+    long countRes ;
+    int InversePairs(vector<int> data) {
+        countRes = 0;
+        if(data.size() == 0)
+            return 0;
+        MergeSort(data,0,data.size()-1);
+        return countRes%1000000007 ;
+    }
+     //递归分
+    void MergeSort(vector<int>& data,int first,int end){
+        if(first < end){
+            int mid = (first + end)/2;
+            MergeSort(data,first,mid);
+            MergeSort(data,mid+1,end);
+            vector<int> tmp;
+            MergeArray(data,first,mid,end,tmp);
+        }
+    }
+    //治
+    void MergeArray(vector<int>& data,int first,int mid,int end,vector<int> tmp){
+        int i = first;
+        int m = mid;
+        int j = mid + 1;
+        int n = end;
+     //下面就开始两两进行比较，若前面的数大于后面的数，就构成逆序对
+        while(i<=m && j<=n){
+            if(data[i] > data[j]){
+                //如果data[i] > data[j], 说明从i到mid的元素都大于data[j], 因为此时数组是有序的
+                tmp.push_back(data[i++]);
+                countRes += n - j + 1;
+            }
+            else{ //不符合, 直接赋值
+                tmp.push_back(data[j++]);
+            }
+        }
+        //剩余没有比对的, 直接赋值
+        while(i<=m)
+            tmp.push_back(data[i++]);
+        while (j<=n)
+            tmp.push_back(data[j++]);
+ 
+        //更新data数组
+        int k = 0;
+        for (int i = first; i <= end &&k<tmp.size(); i++)
+            data[i] = tmp[k++];
+         
+    }
+};

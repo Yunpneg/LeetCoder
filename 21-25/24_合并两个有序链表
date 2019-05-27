@@ -51,3 +51,19 @@ public:
         return L->next; //L包含为0的头指针, 所以要将头指针忽略
     }   
 };
+
+
+递归
+Node *MergeRecursive(Node *head1,Node *head2)
+{
+ if(head1==nullptr&&head2==nullptr)
+    return nullptr;
+ else if(head1==nullptr)
+   return head2;
+ else if(head2==nullptr)
+  return head1;
+ else if(head1->val<=head2->val)
+    head1->next =MergeRecursive(head1->next,head2);
+ else 
+   head2->next =MergeRecursive(head1,head2->next);
+}

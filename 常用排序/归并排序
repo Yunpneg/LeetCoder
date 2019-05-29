@@ -1,0 +1,54 @@
+快速排序首先选一个轴值(pivot，也有叫基准的)，将待排序记录划分成独立的两部分，左侧的元素均小于轴值，右侧的元素均大于或等于轴值，
+然后对这两部分再重复，直到整个序列有序
+
+过程:
+  把长度为n的输入序列分成两个长度为n/2的子序列；
+  对这两个子序列分别采用归并排序；
+  将两个排序好的子序列合并成一个最终的排序序列。
+  
+  
+ //升序归并
+#include <iostream>
+#include <vector>
+using namespace std;
+
+//返回中值, 以此中值划分数组
+int Sort(vector<int> &res, int start, int end)
+{
+    int i=start, j=end;
+    while(i<j)
+    {
+        //从后向前扫描
+        while(i<j && res[i]<=res[j])
+            j--;
+        //跳出while循环, 说明i>j或者res[i]>res[j]
+        //如果i<j, 则res[i]>res[j], 交换顺序
+        if(i<j)
+        {
+            int temp = res[i];
+            res[i] = res[j];
+            res[j] = temp;
+        }
+        //从前向后扫描
+        while(i<j && res[i]<=res[j])
+            i++;
+        if(i<j)
+        {
+            int temp = res[i];
+            res[i] = res[j];
+            res[j] = temp;
+        }
+    }
+    return i;
+}
+
+void mergeSort(vector<int> &res, int start, int end)
+{
+    if(start<end)
+    {
+        int flag = Sort(res, start, end);
+        //递归处理左右数组
+        mergeSort(res, start, flag-1);
+        mergeSort(res, flag+1, end);
+    }   
+}

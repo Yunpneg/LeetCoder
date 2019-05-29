@@ -1,0 +1,27 @@
+比较相邻的元素。如果第一个比第二个大，就交换它们两个；
+对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对，这样在最后的元素应该会是最大的数；
+针对所有的元素重复以上的步骤，除了最后一个；
+重复步骤1~3，直到排序完成。
+
+
+//冒泡
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void BubbleSort(vector<int> &res)
+{
+    for(int i=0; i<res.size() - 1; i++)
+    {
+        //每循环一次, 数组末尾增添一位较大元素, 不再参与循环
+        for(int j=0; j<res.size() - 1 - i; j++)
+        {
+            if(res[j] > res[j+1])
+            {
+                int temp = res[j];
+                res[j] = res[j+1];
+                res[j+1] = temp;
+            }
+        }
+    }
+}

@@ -32,6 +32,47 @@ void FindNumsAppearOnce(vector<int> data)
         }
         cout << flag << endl;
     }
+
+
+利用map
+
+#include <iostream>
+#include <vector>
+#include <map>
+using namespace std;
+
+
+void findOnce(vector<int> &data)
+{
+    map<int, int> mymap;
+    map<int, int>::iterator iter;
+    for(int i=0; i<data.size(); i++)
+    {
+        iter = mymap.find(data[i]);
+        if(iter == mymap.end())
+        {
+            mymap.insert(make_pair(data[i], 1));
+        }
+        else
+        {
+            //如果map里面插入之前的<key, value>,如果key在map里面有的话，不会覆盖之前的value,
+            //一般先判断之前有没有数据，有的话先删除，然后再去添加
+            mymap.erase(iter);
+            mymap.insert(make_pair(data[i], 2));
+        }
+    }
+    //遍历一遍map，返回value为1对应的key就是我们需要求得元素
+    
+    iter = mymap.begin();
+    for(; iter != mymap.end(); iter++)
+    {
+        if(iter->second == 1)
+        {
+            cout << iter->first <<" "<<endl;
+        }
+    }
+    
+}
     
     
 思路: 利用异或运算的特性

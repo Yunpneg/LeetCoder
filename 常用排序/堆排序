@@ -1,0 +1,84 @@
+堆的性质
+1. 堆是具有以下性质的完全二叉树
+  -> 对于完全二叉树, 父节点的索引为i, 则其左叶节点的索引是2i+1, 右页节点的索引是2i+2
+2. 每个结点的值都大于或等于其左右孩子结点的值，称为大顶堆；
+3. 或者每个结点的值都小于或等于其左右孩子结点的值，称为小顶堆
+
+按照广度优先遍历搜索堆, 堆的节点满足以下的性质:
+1. 大顶堆：arr[i] >= arr[2i+1] && arr[i] >= arr[2i+2]  
+2. 小顶堆：arr[i] <= arr[2i+1] && arr[i] <= arr[2i+2] 
+
+
+堆排序的基本思想
+1. 将待排序序列构造成一个大顶堆，此时，整个序列的最大值就是堆顶的根节点。(升序采用大顶堆，降序采用小顶堆)
+  -> 从下往上, 从左往右调整元素
+  -> 找出倒数第一个非叶节点的索引, 即最后一个页节点的父节点. 
+  -> 最后一个叶节点的索引是n-1, 其父节点的索引是i, 则最后一个叶节点的索引是2*i+1 = n-1, 所以i=n/2 - 1
+  -> 找到第二个非叶节点, 继续交换, 直到所有的非叶节点都大于其子节点, 则大顶堆构建成功
+2. 将其与末尾元素进行交换，此时末尾就为最大值。
+  -> 将堆顶元素与末尾元素进行交换，使末尾元素最大。
+  -> 然后继续调整堆，再将堆顶元素与末尾元素交换，得到第二大元素。如此反复进行交换、重建、交换。
+
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+//在堆构建好的前提下,交换元素
+void Heapify(vector<int> &res, int first, int end)
+{
+    int father = first;
+    int son = 2*father + 1; //从左子节点开始
+    while(son < end)
+    {
+        //如果右子节点存在, 且比左子节点的值大, 则将移向右子节点
+        if(son + 1 < end && res[son] < res[son + 1])
+            son++;
+        if(res[father] > res[son]) break; //父节点大于子节点, 则跳出循环
+        else
+        {
+            //交换父节点与子节点的值
+            int temp = res[father];
+            res[father] = res[son];
+            res[son] = temp;
+            //将子节点的索引赋予父节点, 继续比较
+            father = son;
+            son = 2*father + 1;
+        }
+    }
+}
+
+//堆排序
+void HeapSort(vector<int> &res)
+{
+    int len = (int)res.size();
+    //从倒数第一个非叶节点开始构建大堆顶
+    for(int i = len/2 -1; i>=0; i--)
+    {
+        Heapify(res, i, len);
+    }
+    //交换堆顶和堆尾的元素
+    for(int j=len-1; j>=0; j--)
+    {
+        int temp = res[0];
+        res[0] = res[j];
+        res[j] = temp;
+        //继续构建大顶堆
+        Heapify(res, 0, j);
+    }
+}
+
+int main(){
+    vector<int> res = {5, 4, 3, 2, 1};
+    HeapSort(res);
+    
+    for(int i=0; i<res.size(); i++)
+    {
+        cout << res[i] << " "<<endl;
+    }
+    
+    return 0;
+}
+
+
+

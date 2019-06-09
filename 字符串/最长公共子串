@@ -1,0 +1,71 @@
+输入描述：输入为两行字符串（可能包含空格），长度均小于等于50。
+输出描述:  输出为一个整数，表示最长公共连续子串的长度。
+输入例子:
+abcde
+abgde
+输出例子:
+2
+
+利用矩阵:
+1. 假设两个字符串str1和str2的长度分别为m和n，构建一个矩阵（即二维数组）M[m][n]，初始值都设为0
+2. 如果字符串str1中第i个字符str[i-1](下标从零开始)与字符串str2中第j个字符串str[j-1]相等，则将matric[i][j]设为1。
+3. 最后统计矩阵M中对角线(任意对角线, 不只是主对角线)最大的连续1的个数，即为两字符串最长公共子串
+
+图解:
+str1: abcde    str2: abgde  
+matrx = 
+[ 1  0  0  0  0 
+ 
+  0  1  0  0  0
+ 
+  0  0  0  0  0
+ 
+  0  0  0  1  0
+ 
+  0  0  0  0  1 ]
+
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main()
+{
+    string str1, str2;
+    int matrix[50][50]={0};
+    int maxlen = 0;
+    getline(cin, str1);
+    getline(cin, str2);
+    //如果两个位置的元素相等，矩阵值为1
+    for(int i=0; str1[i] != '\0'; i++)
+    {
+        for(int j=0; str2[j] != '\0'; j++)
+        {
+            if(str1[i] == str2[j])
+            {
+                matrix[i][j] = 1;
+            }
+        }
+    }
+    for(int i=0; str1[i] != '\0'; i++)
+    {
+        for(int j=0; str2[j] != '\0'; j++)
+        {
+            int m=i;
+            int n=j;
+            int len = 0;
+            //遍历矩阵
+            while(matrix[m++][n++] == 1)
+            {
+                len++;
+            }
+            if(maxlen < len)
+            {
+                maxlen = len;
+            }
+        }
+    }
+    cout << maxlen << endl;
+    return 0;
+}

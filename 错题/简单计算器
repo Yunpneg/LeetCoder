@@ -1,0 +1,12 @@
+请写一个整数计算器，支持加减乘三种运算和括号
+
+Python
+
+import sys
+def solve():
+ 
+    ops=sys.stdin.readline().strip()
+ 
+    print eval(ops)
+
+solve()

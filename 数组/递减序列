@@ -1,0 +1,50 @@
+对于一个长度为n的整数序列，你需要检查这个序列是否可以是非递减序列，假如你最多可以改变其中的一个数。
+非递减序列的定义是：array[i]<=array[i+1], for 1<=i<n;
+
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+    int n, m;
+    cin >> n;
+    vector<int> nums;
+    for(int i=0; i<n; i++)
+    {
+        cin >> m;
+        nums.push_back(m);
+    }
+    int errorNum = 0;
+    for (int i = 0; i<nums.size() - 1; i++)
+    {
+        //对于不符合非递增序列
+        if (nums[i] > nums[i + 1]){
+            //判断是否已经修改过一次数字了
+            if (errorNum<1){
+                //对于没有修改过数字时，我们首先看访问的数字前一个是否还有数字
+                if (i - 1 >= 0){
+                    //如果还有数字，那么就判断访问数字的后一个是否大于等于前一个，如果是，把该数字赋值为后一个数字即可，这样不会影响到后面的数字
+                    if (nums[i + 1] >= nums[i - 1]){
+                        nums[i] = nums[i + 1];
+                    }
+                    //但是如果后一个数字不大于前一个数字，那么只能将后一个数字赋值为前一个数字，如果因此导致后一个数字又不符合非递增序列，那么直接判断不符合非递归数列
+                    else if (nums[i + 1] < nums[i - 1]){
+                        nums[i + 1] = nums[i];
+                    }
+                }
+                else{
+                    nums[i] = nums[i + 1];
+                }
+                errorNum++;
+            }
+            else{
+                cout << 0 << endl;
+            }
+        }
+
+    }
+    cout << 1 << endl;
+    return 0;
+}

@@ -41,38 +41,43 @@ void FindNumsAppearOnce(vector<int> data)
 #include <map>
 using namespace std;
 
-
-void findOnce(vector<int> &data)
+int main()
 {
+    int n, temp;
+    vector<int> data;
+    cin >> n;
+    for(int i=0; i<n; i++)
+    {
+        cin >> temp;
+        data.push_back(temp);
+    }
     map<int, int> mymap;
     map<int, int>::iterator iter;
     for(int i=0; i<data.size(); i++)
     {
         iter = mymap.find(data[i]);
-        if(iter == mymap.end())
+        if(iter == mymap.end()) //没找到
         {
             mymap.insert(make_pair(data[i], 1));
         }
-        else
+        else //找到了
         {
-            //如果map里面插入之前的<key, value>,如果key在map里面有的话，不会覆盖之前的value,
-            //一般先判断之前有没有数据，有的话先删除，然后再去添加
-            mymap.erase(iter);
-            mymap.insert(make_pair(data[i], 2));
+            int val = iter->second + 1;
+            mymap.erase(iter); //若已存在相同的key, 要先删除
+            mymap.insert(make_pair(data[i], val));
         }
     }
-    //遍历一遍map，返回value为1对应的key就是我们需要求得元素
     
-    iter = mymap.begin();
-    for(; iter != mymap.end(); iter++)
+    for(iter = mymap.begin(); iter != mymap.end(); iter++)
     {
-        if(iter->second == 1)
+        if(iter->second % 2 != 0)
         {
-            cout << iter->first <<" "<<endl;
+            cout << iter->first <<endl;
         }
     }
-    
+    return 0;
 }
+
     
     
 思路: 利用异或运算的特性

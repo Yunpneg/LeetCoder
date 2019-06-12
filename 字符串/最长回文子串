@@ -1,0 +1,43 @@
+给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+
+思路:
+  1. 利用Manacher algorithm
+  
+  
+class Solution {
+public:
+    //Manacher Algorithm
+    string longestPalindrome(string s) {
+        // Insert '#'
+        string t = "$#";
+        for (int i = 0; i < s.size(); ++i) {
+            t += s[i];
+            t += "#";
+        }
+        //处理字符串t
+        vector<int> p(t.size(), 0); //生成一个存放字符的容器p, 有t.size()个元素, 均初始化为0
+        //mx是最大回文字符串的边界, id是最大回文字符串的中心
+        int mx = 0, id = 0, resLen = 0, resCenter = 0;
+        for (int i = 1; i < t.size(); ++i) {
+            //计算数组p[i]
+            p[i] = mx > i ? min(p[2 * id - i], mx - i) : 1;
+            //判断t[i]元素向前向后的字符是否一样; p[i]是半径
+            //这种情况是针对mx之外的
+            while (t[i + p[i]] == t[i - p[i]]){
+                ++p[i]; //如果一样, 则半径增大, 继续匹配
+            } 
+            //更新id, mx
+            if (mx < i + p[i]) {
+                mx = i + p[i];
+                id = i;
+            }
+            if (resLen < p[i]) {
+                resLen = p[i];
+                resCenter = i;
+            }
+        }
+        //string.substr(起始位置, 长度), 截取字符串
+        //起始位置是中间位置减去半径再除以2
+        return s.substr((resCenter - resLen) / 2, resLen - 1);
+    }
+};

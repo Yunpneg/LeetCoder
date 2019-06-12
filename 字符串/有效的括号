@@ -1,0 +1,47 @@
+给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
+
+有效字符串需满足：
+
+左括号必须用相同类型的右括号闭合。
+左括号必须以正确的顺序闭合。
+注意空字符串可被认为是有效字符串。
+
+思路: 利用栈stack和map哈希表
+
+class Solution {
+public:
+    bool isValid(string s) 
+    {
+        if(s.empty()) return true; //如果字符串为空, 为有效字符串
+        if(s.length() % 2 != 0) return false; //字符串个数为奇数, 不是有效字符串
+        
+        map<char, char> wordBook; //定义map容器,存放key-value对
+        //将左右括号存放到map哈希表中; 以右括号作为键, 相应的值是左括号, 用于匹配
+        wordBook.insert(map<char, char>::value_type (')', '('));
+        wordBook.insert(map<char, char>::value_type (']', '['));
+        wordBook.insert(map<char, char>::value_type ('}', '{'));
+        
+        stack<char> sta; //建立栈, 存放左括号
+        for(int i=0; i<s.length(); i++)
+        {
+            if(s[i] == '(' || s[i] == '[' || s[i] == '{')
+            {
+                sta.push(s[i]);
+            }
+            else if(s[i] == ')' || s[i] == ']' || s[i] == '}')
+            {
+                //如果栈中为空, 则意味着未取到右括号, 则不是合格字符串
+                if(sta.empty()) return false;
+                //以s[i]的值为键, 获取wordBook哈希表中的对应的值, 与右括号匹配
+                if(wordBook[s[i]] == sta.top())
+                {
+                    sta.pop(); //匹配成功则删除栈顶元素
+                    continue;
+                }
+                else return false;
+            } 
+        }
+        if(sta.empty()) return true; //如果最后栈为空, 则是合格字符串
+        else return false;
+    }
+};

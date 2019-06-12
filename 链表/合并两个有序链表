@@ -67,3 +67,34 @@ Node *MergeRecursive(Node *head1,Node *head2)
  else 
    head2->next =MergeRecursive(head1,head2->next);
 }
+
+
+list实现链表合并
+
+#include <iostream>
+#include <iterator>
+#include <list>
+#include <algorithm>
+using namespace std;
+int main()
+{
+    list<int> list1,list2;
+    int a;
+    while (cin >> a)
+    {
+        list1.push_back(a);
+        if (cin.get() == '\n')   //遇到回车，终止
+            break;
+        
+
+    }
+    while (cin >> a)
+    {
+        list2.push_back(a);
+        if (cin.get() == '\n')   //遇到回车，终止
+            break;
+        
+    }
+    merge(list1.begin(),list1.end(),list2.begin(),list2.end(),ostream_iterator<int>(cout, " "));
+
+}

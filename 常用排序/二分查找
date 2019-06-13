@@ -1,0 +1,79 @@
+1. 该问题的规模缩小到一定的程度就可以容易地解决；
+如果n=1即只有一个元素，则只要比较这个元素和x就可以确定x是否在表中。因此这个问题满足分治法的第一个适用条件 
+2. 该问题可以分解为若干个规模较小的相同问题;
+3. 分解出的子问题的解可以合并为原问题的解；
+4. 分解出的各个子问题是相互独立的。
+
+
+递归版本
+
+#include<iostream>
+#define MAX_SIZE 102
+using namespace std;
+template <class T>
+int BinarySearch(T a[],const T&x,int n,int left,int right)
+{
+    if(left>=right)
+        return -1;
+    else
+    {
+        if(a[(left+right)/2]==x)
+            return (left+right)/2;
+        else if(x>=(left+right)/2)
+            return BinarySearch(a,x,n,(left+right)/2+1,right);
+        else if(x<(left+right)/2)
+            return BinarySearch(a,x,n,left,(left+right)/2-1);
+    }
+}
+int main()
+{
+    int a[MAX_SIZE];
+    int i,len,x,p;
+    cin>>len;
+    for(i=0;i<len;i++)
+        cin>>a[i];
+    cin>>x;
+    p=BinarySearch(a,x,len,0,len-1);
+    if(p==-1)
+        cout<<"该数不存在！"<<endl;
+    else
+    cout<<p+1<<endl;
+    return 0;
+}
+
+非递归版本
+#include<iostream>
+#define MAX_SIZE 102
+using namespace std;
+template<class Type>
+int BinarySearch(Type a[],const Type& x,int n)
+{
+    int left=0;
+    int right=n-1;
+    while(left<=right)
+    {
+        int middle=(left+right)/2;
+        if(a[middle]==x)
+            return middle;
+        if(x>=a[middle])
+            left=middle+1;
+        else
+            right=middle-1;
+    }
+    return -1;
+}
+int main()
+{
+    int a[MAX_SIZE];
+    int i,len,x,p;
+    cin>>len;
+    for(i=0;i<len;i++)
+        cin>>a[i];
+    cin>>x;
+    p=BinarySearch(a,x,len);
+    if(p==-1)
+        cout<<"该数不存在！"<<endl;
+    else
+    cout<<p+1<<endl;
+    return 0;
+}

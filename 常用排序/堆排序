@@ -53,6 +53,7 @@ void HeapSort(vector<int> &res)
 {
     int len = (int)res.size();
     //从倒数第一个非叶节点开始构建大堆顶
+    //倒数第一个非叶节点的值为n/2-1
     for(int i = len/2 -1; i>=0; i--)
     {
         Heapify(res, i, len);

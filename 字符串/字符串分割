@@ -1,0 +1,95 @@
+给定一个由小写字母组成的字符串s，请将其分割成尽量多的子串，并保证每个字母最多只在其中一个子串中出现
+
+该样例下最优的分割为"ababbaca" + "defgde" + "hijhklij"，在该分割下字母abc仅出现在"ababbaca"中、
+字母defg仅出现在"defgde"中、字母hijkl仅出现在"hijhklij"中
+
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <queue>
+using namespace std;
+ 
+  
+ 
+void sort(vector<vector<int> >& V);
+ 
+void swap(vector<int>& a, vector<int>& b);
+
+int main()
+{
+    string s;
+    cin>>s;
+    //定义map, 字符型和整型容器, 判断字符所在位置和出现次数
+    map<char, vector<int> > M;
+    for(int i = 0; i < (int)s.size(); i++)
+    {
+        M[s[i]].push_back(i);
+    } 
+    
+    vector<vector<int> > V;
+    for(auto i = M.begin(); i != M.end(); i++)
+    {    //遍历map
+        if(i->second.size() == 1)
+             //back() 返回当前vector容器中末尾元素的引用。
+            i->second.push_back(i->second.back());
+ 
+        if(i->second.size() >= 2) 
+        {   //end() 函数返回一个指向当前vector末尾元素的下一位置的迭代器.要访问末尾元素,需要先将此迭代器减1。
+            for(auto j = i->second.begin()+1; j !=  i->second.end()-1; j++)
+            {
+                i->second.erase(j--);//除了第一次出现的字符, 其余相同字符都删掉
+            }
+        }
+        V.push_back(i->second);
+    }
+    
+    sort(V);
+    vector<vector<int> > Q;
+    Q.push_back(V[0]);
+ 
+    int index = 1;
+    while(index < (int)V.size())
+    {
+        vector<int> a = V[index];
+        vector<int> b = Q.back();
+        if(a[0] > b[1])
+            Q.push_back(a);
+        else
+        {
+            vector<int> t;
+            t.push_back(b[0]);
+            t.push_back(max(b[1],a[1]));
+            Q.pop_back();
+            Q.push_back(t);
+        }
+        index++;
+    }
+    for(int i = 0; i < (int)Q.size(); i++)
+    {
+        cout<<Q[i][1]-Q[i][0]+1;
+        if(i != (int)Q.size()-1)
+            cout<<" ";
+    }
+    return 0;
+}
+ 
+void sort(vector<vector<int> >& V)
+{
+    for(int i = 0; i < (int)V.size()-1; i++)
+    { 
+        for(int j = i+1; j < (int)V.size(); j++) 
+        { 
+            if(V[i][0] > V[j][0])
+                swap(V[i],V[j]);
+        }
+    }
+}
+ 
+void swap(vector<int>& a, vector<int>& b)
+{
+    vector<int> t = a;
+    a = b;
+    b = t; 
+}

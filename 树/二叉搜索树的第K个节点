@@ -1,0 +1,33 @@
+给定一棵二叉搜索树，请找出其中的第k小的结点
+
+/*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    int count;
+    void inorder(TreeNode* root,TreeNode* &ans){
+        if(root){
+            inorder(root->left,ans);
+            count--;
+            if(!count) ans = root;
+            inorder(root->right,ans);
+        }
+    }
+    TreeNode* KthNode(TreeNode* pRoot, int k)
+    {
+        if(!pRoot || k < 1) return nullptr;
+        TreeNode* ans = NULL;
+        count = k;
+        inorder(pRoot,ans);
+        return ans;
+    }
+
+};

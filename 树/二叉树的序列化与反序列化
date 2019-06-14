@@ -1,0 +1,53 @@
+1. 二叉树的序列化是指：把一棵二叉树按照某种遍历方式的结果以某种格式保存为字符串，从而使得内存中建立起来的二叉树可以持久保存。
+  -> 定义一个stringbuilder保存序列过程中的结果：按照先序遍历方式遍历二叉树，若结点非空则把 "结点值!" append到builder中；
+  -> 若结点空则把  "#!" append到builder中；最后用builder生成字符串就是序列化结果。    
+2. 二叉树的反序列化是指：根据某种遍历顺序得到的序列化字符串结果str，重构二叉树。
+  -> 先序序列化结果重构二叉树==String[] nodes=str.split("!")；//由每个结点的结束符号划分序列化结果序列，得到各个结点值；
+  -> 然后按照先序遍历的顺序“根左右”的特性，遍历nodes数组建立二叉树：
+    -> 当前遍历元素非 # 则作为一个结点插入树中作为上一结点的左儿子；
+    -> 当前遍历元素为 # 则表示此子树已结束，遍历下一元素作为上一结点的右儿子；
+
+
+/*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};
+*/
+class Solution {
+private:
+    TreeNode* decode(char *&str) {
+        if(*str=='#'){
+            str++;
+            return NULL;
+        }
+        int num = 0;
+        while(*str != ',')
+            num = num*10 + (*(str++)-'0');
+        str++;
+        TreeNode *root = new TreeNode(num);
+        root->left = decode(str);
+        root->right = decode(str);
+        return root;
+    }
+public:
+    char* Serialize(TreeNode *root) {   
+        if(!root) return "#";
+        string r = to_string(root->val);
+        r.push_back(',');
+        char *left = Serialize(root->left);
+        char *right = Serialize(root->right);
+        char *ret = new char[strlen(left) + strlen(right) + r.size()];
+        strcpy(ret, r.c_str());
+        strcat(ret, left);
+        strcat(ret, right);
+        return ret;
+    }
+    TreeNode* Deserialize(char *str) {
+        return decode(str);
+    }
+};

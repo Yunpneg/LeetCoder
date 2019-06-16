@@ -15,8 +15,10 @@ using namespace std;
 
 void mergeSort(vector<int> &res, int start, int end)
 {
+    //寻找轴值
     if(start < end)
     {
+    //
         int i = start, j = end;
         while(i<j)
         {

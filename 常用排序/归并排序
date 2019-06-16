@@ -51,3 +51,15 @@ void Sort(vector<int> &res, int start, int end, vector<int> &temp)
     }
     
 }
+int main()
+{
+    vector<int> vec={9,8,7,3,2,1};
+    vector<int> temp(vec.size());
+    int start = 0, end = (int)(vec.size()-1);
+    Sort(vec, start, end, temp);
+    for(int i=0; i<=end; i++)
+    {
+        cout << vec[i]<<" ";
+    }
+    return 0;
+}

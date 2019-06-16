@@ -14,43 +14,36 @@
 #include <vector>
 using namespace std;
 
-//返回中值, 以此中值划分数组
-int Sort(vector<int> &res, int start, int end)
+void sortAl(vector<int> &vec, int start, int end)
 {
     int i=start, j=end;
-    while(i<j)
+    int temp = vec[i];
+    if(i<j)
     {
-        //从后向前扫描
-        while(i<j && res[i]<=res[j])
-            j--;
-        //跳出while循环, 说明i>j或者res[i]>res[j]
-        //如果i<j, 则res[i]>res[j], 交换顺序
-        if(i<j)
+        while(i<j)
         {
-            int temp = res[i];
-            res[i] = res[j];
-            res[j] = temp;
+            while(i<j && vec[j] >= temp)
+            {
+                j--;
+            }
+            if(i<j)
+            {
+                vec[i++] = vec[j];
+            }
+            while(i<j && vec[i] < temp)
+            {
+                i++;
+            }
+            //说明vec[i] > temp, 交换将vec[i]移到temp右侧
+            if(i<j)
+            {
+                vec[j--] = vec[i];
+            }
         }
-        //从前向后扫描
-        while(i<j && res[i]<=res[j])
-            i++;
-        if(i<j)
-        {
-            int temp = res[i];
-            res[i] = res[j];
-            res[j] = temp;
-        }
+        vec[i] = temp;
+        //递归
+        sortAl(vec, start, i-1);
+        sortAl(vec, i+1, end);
+        
     }
-    return i;
-}
-
-void mergeSort(vector<int> &res, int start, int end)
-{
-    if(start<end)
-    {
-        int flag = Sort(res, start, end);
-        //递归处理左右数组
-        mergeSort(res, start, flag-1);
-        mergeSort(res, flag+1, end);
-    }   
 }

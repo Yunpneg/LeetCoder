@@ -9,41 +9,50 @@
   将两个排序好的子序列合并成一个最终的排序序列。
   
   
-
 #include <iostream>
 #include <vector>
 using namespace std;
 
-void sortAl(vector<int> &vec, int start, int end)
+void mergeSort(vector<int> &res, int start, int end)
 {
-    int i=start, j=end;
-    int temp = vec[i];
-    if(i<j)
+    if(start < end)
     {
+        int i = start, j = end;
         while(i<j)
         {
-            while(i<j && vec[j] >= temp)
-            {
+            //从后向前扫描
+            while(i<j && res[i]<=res[j])
                 j--;
-            }
+            //跳出while循环, 说明i>j或者res[i]>res[j]
+            //如果i<j, 则res[i]>res[j], 交换顺序
             if(i<j)
             {
-                vec[i++] = vec[j];
+                int temp = res[i];
+                res[i] = res[j];
+                res[j] = temp;
             }
-            while(i<j && vec[i] < temp)
-            {
+            //从前向后扫描
+            while(i<j && res[i]<=res[j])
                 i++;
-            }
-            //说明vec[i] > temp, 交换将vec[i]移到temp右侧
             if(i<j)
             {
-                vec[j--] = vec[i];
+                int temp = res[i];
+                res[i] = res[j];
+                res[j] = temp;
             }
         }
-        vec[i] = temp;
-        //递归
-        sortAl(vec, start, i-1);
-        sortAl(vec, i+1, end);
-        
+        //递归处理左右数组
+        mergeSort(res, start, i-1);
+        mergeSort(res, i+1, end);
+    }
+}
+int main()
+{
+    vector<int> vec = {9, 8, 3, 1, 5, 7};
+    int start = 0, end = (int)vec.size()-1;
+    mergeSort(vec, start, end);
+    for(int i=0; i<=end; i++)
+    {
+        cout << vec[i] <<" ";
     }
 }

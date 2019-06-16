@@ -6,54 +6,53 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-//合并数组
-void Merge(vector<int> &res, int start, int mid, int end, vector<int> &temp)
-{
-    int i=start, j=mid+1;
-    int t=0;
-    while(i<=mid && j<=end)
-    {
-        if(res[i] <= res[j]) //两组数组依次比较大小
-        {
-            temp[t++] = res[i++];
-        }
-        else
-        {
-            temp[t++] = res[j++];
-        }
-    }
-    //左数组仍存在元素
-    while(i<=mid)
-    {
-        temp[t++] = res[i++];
-    }
-    //右数组仍存在元素
-    while(j<=end)
-    {
-        temp[t++] = res[j++];
-    }
-    //将临时数组的元素拷贝到原数组
-    t = 0;
-    while(start <= end)
-    {
-        res[start++] = temp[t++];
-    }
-}
+
 //要设置临时数组存放元素, 防止递归中频繁开辟空间
 void Sort(vector<int> &res, int start, int end, vector<int> &temp)
 {
     if(start < end)
     {
+        //分组
         int mid = (start + end) / 2;
         Sort(res, start, mid, temp);
         Sort(res, mid+1, end, temp);
-        Merge(res, start, mid, end, temp);
+        //合组
+        int i=start, j=mid+1;
+        int t=0;
+        while(i<=mid && j<=end)
+        {
+            if(res[i] <= res[j]) //两组数组依次比较大小
+            {
+                temp[t++] = res[i++];
+            }
+            else
+            {
+                temp[t++] = res[j++];
+            }
+        }
+        //左数组仍存在元素
+        while(i<=mid)
+        {
+            temp[t++] = res[i++];
+        }
+        //右数组仍存在元素
+        while(j<=end)
+        {
+            temp[t++] = res[j++];
+        }
+        //将临时数组的元素拷贝到原数组
+        t = 0;
+        while(start <= end)
+        {
+            res[start++] = temp[t++];
+        }
     }
     
 }
 int main()
 {
     vector<int> vec={9,8,7,3,2,1};
+    //必须初始化vector
     vector<int> temp(vec.size());
     int start = 0, end = (int)(vec.size()-1);
     Sort(vec, start, end, temp);
@@ -63,3 +62,4 @@ int main()
     }
     return 0;
 }
+

@@ -24,8 +24,8 @@ void selectSort(vector<int> &res)
             }
         }
         //交换当前元素和最小元素
-        res[min_index] = res[i];
-        res[i] = min_element;
+        res[min_index] = res[i]; //用当前元素的值直接覆盖最小元素值的所在位置
+        res[i] = min_element; // 将最小值赋给当前元素所在位置
         
     }
 }
